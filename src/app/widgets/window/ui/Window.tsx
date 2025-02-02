@@ -16,6 +16,46 @@ export const Window: React.FC<WindowProps> = props => {
 		message: '',
 	})
 
+	const [errorState, setErrorState] = useState({
+		nameError: '',
+		emailError: '',
+		numberError: '',
+		contactMethodError: '',
+		messageError: '',
+	})
+
+	const validateField = (name: string, value: string) => {
+		switch (name) {
+			case 'name':
+				if (!value) {
+					return 'This field is required'
+				}
+				return ''
+			case 'email':
+				if (!value) {
+					return 'This field is required'
+				}
+				return ''
+			case 'number':
+				if (!value) {
+					return 'This field is required'
+				}
+				return ''
+			case 'contactMethod':
+				if (!value) {
+					return 'This field is required'
+				}
+				return ''
+			case 'message':
+				if (value.length > 50) {
+					return 'The character limit is 50 symbols'
+				}
+				return ''
+			default:
+				return ''
+		}
+	}
+
 	const onChange = (e: React.FormEvent<HTMLFormElement>) => {
 		const { name, value } = e.target
 		setFormState({ ...formState, [name]: value })
@@ -23,6 +63,26 @@ export const Window: React.FC<WindowProps> = props => {
 
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+		const errors = {
+			nameError: validateField('name',formState.name),
+			emailError: validateField('email',formState.email),
+			numberError: validateField('number',formState.number),
+			contactMethodError: validateField('contactMethod',formState.contactMethod),
+			messageError: validateField('message',formState.message),
+		}
+
+		setErrorState((prev) => ({
+			...prev,
+			...errors
+		}))
+
+		const hasErrors: boolean = Object.values(errors).some((error) => error)
+
+		if (hasErrors) {
+			console.log('Form has errors!')
+			return;
+		}
+
 		console.log(formState)
 		setFormState({
 			name: '',
