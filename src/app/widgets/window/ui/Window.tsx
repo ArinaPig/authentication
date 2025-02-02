@@ -8,44 +8,29 @@ export const Window: React.FC<WindowProps> = props => {
 	const { form_header } = { ...props }
 	const { contact_label } = { ...props }
 
-	const [name, setName] = useState('')
-	const [email, setEmail] = useState('')
-	const [number, setNumber] = useState('')
-	const [contactMethod, setContactMethod] = useState('email')
-	const [message, setMessage] = useState('')
+	const [formState, setFormState] = useState({
+		name: '',
+		email: '',
+		number: '',
+		contactMethod: 'email',
+		message: '',
+	})
 
-	const nameOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setName(e.target.value)
-	}
-
-	const emailOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setEmail(e.target.value)
-	}
-
-	const numberOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setNumber(e.target.value)
-	}
-
-	const contactMethodOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setContactMethod(e.target.value as 'email' | 'phone')
-	}
-
-	const messageOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setMessage(e.target.value)
+	const onChange = (e: React.FormEvent<HTMLFormElement>) => {
+		const { name, value } = e.target
+		setFormState({ ...formState, [name]: value })
 	}
 
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		console.log(name)
-		console.log(email)
-		console.log(number)
-		console.log(contactMethod)
-		console.log(message)
-		setName('')
-		setEmail('')
-		setNumber('')
-		setContactMethod('')
-		setMessage('')
+		console.log(formState)
+		setFormState({
+			name: '',
+			email: '',
+			number: '',
+			contactMethod: 'email',
+			message: '',
+		})
 	}
 
 	return (
@@ -56,22 +41,25 @@ export const Window: React.FC<WindowProps> = props => {
 					<input
 						type='text'
 						placeholder='Name'
-						value={name}
-						onChange={nameOnChange}
+						name='name'
+						value={formState.name}
+						onChange={onChange}
 						className={style.input}
 					/>
 					<input
 						type='email'
 						placeholder='Email'
-						value={email}
-						onChange={emailOnChange}
+						name='email'
+						value={formState.email}
+						onChange={onChange}
 						className={style.input}
 					/>
 					<input
 						type='tel'
 						placeholder='Phone'
-						value={number}
-						onChange={numberOnChange}
+						name='number'
+						value={formState.number}
+						onChange={onChange}
 						className={style.input}
 					/>
 				</div>
@@ -80,22 +68,22 @@ export const Window: React.FC<WindowProps> = props => {
 					<div>
 						<input
 							type='radio'
-							name='method'
+							name='contactMethod'
 							id='contactMethodEmail'
 							value='email'
-							checked={contactMethod === 'email'}
-							onChange={contactMethodOnChange}
+							checked={formState.contactMethod === 'email'}
+							onChange={onChange}
 						/>
 						<label htmlFor='Email'> Email</label>
 					</div>
 					<div>
 						<input
 							type='radio'
-							name='method'
+							name='contactMethod'
 							id='contactMethodPhone'
 							value='phone'
-							checked={contactMethod === 'phone'}
-							onChange={contactMethodOnChange}
+							checked={formState.contactMethod === 'phone'}
+							onChange={onChange}
 						/>
 						<label htmlFor='Phone'> Phone</label>
 					</div>
@@ -104,16 +92,16 @@ export const Window: React.FC<WindowProps> = props => {
 					<div>
 						<input type='checkbox' name='agree' />
 						<label htmlFor='agree'>
-							I agree to receive a reply by my {contactMethod}
+							I agree to receive a reply by my {formState.contactMethod}
 						</label>
 					</div>
 					<textarea
-						name='massage'
 						placeholder='Message'
 						rows={6}
 						className={style.input}
-						value={message}
-						onChange={messageOnChange}
+						name='message'
+						value={formState.message}
+						onChange={onChange}
 					></textarea>
 				</div>
 				<input type='submit' value='Submit' className={style.submit} />
